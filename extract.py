@@ -136,9 +136,9 @@ with open(data_folder + "line_index.csv") as csvfile:
         print(sentence)
         wordsin = sentence.split()
         wordsout = words_from_candidate_transcript(model.sttWithMetadata(audio,1).transcripts[0])
-
+        #If the is transcription errors try to resync by -2/+2 words  
         for w in wordsin:
-          plusone = False
+          correction = False
           if x > len(wordsout) - 1:
             break
           wordinfo = wordsout[x]
@@ -147,15 +147,15 @@ with open(data_folder + "line_index.csv") as csvfile:
             if len(w) > 4:  
               print(extract_word_wav(wordinfo))
           else:
-            if x > len(wordsout):
+            if x < len(wordsout) - 1:
               wordinfo = wordsout[x + 1]
               word = wordinfo['word']
               if w == word:
                 if len(w) > 4:
                   print(extract_word_wav(wordinfo))
                 x = x + 1
-                plusone = True
-            if plusone == False:
+                correction = True
+            if correction == False:
               if x > 0:
                  wordinfo = wordsout[x - 1]
                  word = wordinfo['word']
@@ -163,6 +163,25 @@ with open(data_folder + "line_index.csv") as csvfile:
                    if len(w) > 4:
                      print(extract_word_wav(wordinfo))
                    x = x - 1
+                   correction = True
+            if correction == False:
+              if x < len(wordsout) - 2:
+                wordinfo = wordsout[x + 2]
+                word = wordinfo['word']
+                if w == word:
+                  if len(w) > 4:
+                    print(extract_word_wav(wordinfo))
+                  x = x + 2
+                  correction = True
+            if correction == False:
+              if x > 1:
+                 wordinfo = wordsout[x - 2]
+                 word = wordinfo['word']
+                 if w == word:
+                   if len(w) > 4:
+                     print(extract_word_wav(wordinfo))
+                   x = x - 2
+                   correction = True    
           x = x +1
           
           
