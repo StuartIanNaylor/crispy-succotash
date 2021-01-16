@@ -109,7 +109,7 @@ model.setBeamWidth(beam_width)
 desired_sample_rate = model.sampleRate()
 wordlist = []
 dataset = []
-data_folder="/home/stuart/Downloads/scottish_english_male/"
+data_folder="/home/stuart/Downloads/northern_english_male/"
 with open(data_folder + "line_index.csv") as csvfile:
     reader = csv.reader(csvfile) 
     for row in reader: # each row is a list
